@@ -1,0 +1,42 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "▶ Run Web Dashboard",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/run_app.py",
+      "console": "integratedTerminal",
+      "justMyCode": false,
+      "env": {
+        "PYTHONPATH": "${workspaceFolder}"
+      }
+    },
+    {
+      "name": "▶ Run CLI (Webcam)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--source", "0"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "▶ Run CLI (Video File)",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/main.py",
+      "args": ["--source", "assets/sample_video.mp4"],
+      "console": "integratedTerminal",
+      "justMyCode": false
+    },
+    {
+      "name": "🅿 Setup Parking Slots",
+      "type": "python",
+      "request": "launch",
+      "program": "${workspaceFolder}/setup_slots.py",
+      "console": "integratedTerminal",
+      "justMyCode": false
+    }
+  ]
+}

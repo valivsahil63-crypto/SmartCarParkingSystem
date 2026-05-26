@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Smart Parking System — ML Dashboard</title>
+  <meta name="description" content="Real-time AI-powered parking management with YOLO vehicle detection, slot monitoring, and license plate recognition." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/style.css" />
+</head>
+<body>
+
+<!-- ── Header ───────────────────────────────────────────────────────────────── -->
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="brand-icon">🚗</div>
+      <div>
+        <h1 class="brand-name">SmartPark <span class="badge-ai">AI</span></h1>
+        <p class="brand-sub">Real-Time ML Parking Intelligence</p>
+      </div>
+    </div>
+    <div class="header-right">
+      <div class="status-dot" id="statusDot"></div>
+      <span class="status-text" id="statusText">Connecting…</span>
+      <span class="fps-pill" id="fpsPill">-- FPS</span>
+    </div>
+  </div>
+</header>
+
+<!-- ── Main Layout ─────────────────────────────────────────────────────────── -->
+<main class="main-grid">
+
+  <!-- LEFT: Video Feed -->
+  <section class="card video-card">
+    <div class="card-header">
+      <span class="card-title">📹 Live Camera Feed</span>
+      <div class="source-controls">
+        <input id="sourceInput" class="source-input" type="text" placeholder="0 (webcam) or video path" value="0" />
+        <button class="btn btn-primary" id="setSourceBtn">Set Source</button>
+        <button class="btn btn-outline" id="reloadSlotsBtn">↺ Reload Slots</button>
+      </div>
+    </div>
+    <div class="video-wrap">
+      <img id="videoFeed" src="/video_feed" alt="Live Video Feed" />
+      <div class="video-overlay-label">LIVE</div>
+    </div>
+  </section>
+
+  <!-- RIGHT: Stats + Plates -->
+  <aside class="side-panel">
+
+    <!-- Occupancy Gauge -->
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-title">🅿️ Parking Occupancy</span>
+      </div>
+      <div class="occupancy-gauge">
+        <svg viewBox="0 0 200 120" class="gauge-svg">
+          <defs>
+            <linearGradient id="freeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#00e676"/>
+              <stop offset="100%" stop-color="#00bcd4"/>
+            </linearGradient>
+            <linearGradient id="occupiedGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%"   stop-color="#ff5252"/>
+              <stop offset="100%" stop-color="#ff6e40"/>
+            </linearGradient>
+          </defs>
+          <!-- Background arc -->
+          <path d="M20,110 A80,80 0 0,1 180,110" fill="none" stroke="#1e2a3a" stroke-width="18" stroke-linecap="round"/>
+          <!-- Occupied arc -->
+          <path id="gaugeArc" d="M20,110 A80,80 0 0,1 180,110" fill="none"
+                stroke="url(#occupiedGrad)" stroke-width="18" stroke-linecap="round"
+                stroke-dasharray="251" stroke-dashoffset="251" style="transition:stroke-dashoffset 0.8s ease"/>
+          <text x="100" y="95" text-anchor="middle" class="gauge-pct" id="gaugePct">0%</text>
+          <text x="100" y="112" text-anchor="middle" class="gauge-sub">occupied</text>
+        </svg>
+      </div>
+      <div class="slot-grid">
+        <div class="slot-stat free">
+          <div class="slot-val" id="freeCount">--</div>
+          <div class="slot-lbl">Free Slots</div>
+        </div>
+        <div class="slot-stat occupied">
+          <div class="slot-val" id="occupiedCount">--</div>
+          <div class="slot-lbl">Occupied</div>
+        </div>
+        <div class="slot-stat total">
+          <div class="slot-val" id="totalCount">--</div>
+          <div class="slot-lbl">Total</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Vehicle Counter -->
+    <div class="card stat-card">
+      <div class="card-header">
+        <span class="card-title">🚙 Vehicle Counter</span>
+      </div>
+      <div class="counter-row">
+        <div class="counter-box enter">
+          <div class="counter-icon">⬇️</div>
+          <div class="counter-val" id="enteredCount">0</div>
+          <div class="counter-lbl">Entered</div>
+        </div>
+        <div class="counter-divider"></div>
+        <div class="counter-box exit">
+          <div class="counter-icon">⬆️</div>
+          <div class="counter-val" id="exitedCount">0</div>
+          <div class="counter-lbl">Exited</div>
+        </div>
+      </div>
+      <div class="current-inside">
+        Currently Inside: <span id="insideCount" class="inside-val">--</span>
+      </div>
+    </div>
+
+    <!-- Plate Log -->
+    <div class="card plate-card">
+      <div class="card-header">
+        <span class="card-title">🔍 Plate Recognition Log</span>
+        <button class="btn btn-sm btn-outline" onclick="clearPlates()">Clear</button>
+      </div>
+      <div class="plate-list" id="plateList">
+        <div class="plate-empty">No plates detected yet…</div>
+      </div>
+    </div>
+
+  </aside>
+</main>
+
+<!-- ── Footer ─────────────────────────────────────────────────────────────── -->
+<footer class="footer">
+  <span>SmartPark ML — Powered by YOLOv8 · OpenCV · EasyOCR · Flask</span>
+  <span id="clockDisplay"></span>
+</footer>
+
+<script src="/static/js/dashboard.js"></script>
+</body>
+</html>
