@@ -1,0 +1,14 @@
+parking_env/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+models/*.pt
+data/logs/
+*.jpg
+*.png
+*.mp4
+*.avi
+.env
+yolov8*.pt
+runs/
